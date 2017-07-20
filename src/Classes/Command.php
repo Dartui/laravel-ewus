@@ -11,7 +11,7 @@ class Command extends BaseCommand {
 	 *
 	 * @var string
 	 */
-	protected $description = 'Command description';
+	protected $description = 'Update eWUS password';
 
 	/**
 	 * The name and signature of the console command.
