@@ -1,0 +1,4 @@
+*** Laravel eWUŚ changelog ***
+
+1.0.0 - 20.07.2017
+* Initial release
