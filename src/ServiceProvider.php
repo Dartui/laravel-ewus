@@ -14,6 +14,12 @@ class ServiceProvider extends BaseProvider {
 		$this->publishes( [
 			__DIR__ . '/../config/ewus.php' => config_path( 'ewus.php' ),
 		] );
+
+		if ( $this->app->runningInConsole() ) {
+			$this->commands( [
+				Classes\Command::class,
+			] );
+		}
 	}
 
 	/**
