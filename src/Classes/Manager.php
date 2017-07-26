@@ -6,6 +6,7 @@ use Dartui\Ewus\Exceptions\ResponseException;
 use gilek\ewus\Client;
 use gilek\ewus\drivers\SoapDriver;
 use gilek\ewus\exceptions\ResponseException as BaseException;
+use Illuminate\Support\Facades\Cache;
 
 class Manager {
 	private $client;
@@ -29,7 +30,7 @@ class Manager {
 		$this->code   = $config['code'];
 	}
 
-	public function changePassword( $password ) {
+	public function password( $password ) {
 		try {
 			$this->login();
 			$response = $this->client->changePassword( $password );
@@ -41,7 +42,20 @@ class Manager {
 		return Password::update( $password );
 	}
 
-	public function checkPesel( $pesel = '' ) {
+	public function pesel( $pesel, $cache = false, $force = false ) {
+		if ( $cache && ! $force ) {
+			$key      = $this->getCacheKey( $pesel );
+			$duration = $cache ?: 6;
+
+			return Cache::remember( $key, $duration, function () use ( $pesel ) {
+				return $this->checkPesel( $pesel );
+			} );
+		}
+
+		return $this->checkPesel( $pesel );
+	}
+
+	private function checkPesel( $pesel ) {
 		try {
 			$this->login();
 			$response = $this->client->checkPesel( $pesel );
@@ -51,6 +65,10 @@ class Manager {
 		}
 
 		return new PESEL( $response );
+	}
+
+	private function getCacheKey( $pesel ) {
+		return 'Dartui\Ewus\pesel_' . $pesel;
 	}
 
 	private function login() {
