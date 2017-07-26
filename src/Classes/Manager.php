@@ -3,6 +3,7 @@
 namespace Dartui\Ewus\Classes;
 
 use Dartui\Ewus\Exceptions\ResponseException;
+use Dartui\Ewus\Responses\PeselResponse;
 use gilek\ewus\Client;
 use gilek\ewus\drivers\SoapDriver;
 use gilek\ewus\exceptions\ResponseException as BaseException;
@@ -48,27 +49,27 @@ class Manager {
 			$duration = $cache ?: 6;
 
 			return Cache::remember( $key, $duration, function () use ( $pesel ) {
-				return $this->checkPesel( $pesel );
+				return $this->getPeselResponse( $pesel );
 			} );
 		}
 
-		return $this->checkPesel( $pesel );
+		return $this->getPeselResponse( $pesel );
 	}
 
-	private function checkPesel( $pesel ) {
+	private function getCacheKey( $pesel ) {
+		return 'Dartui\Ewus\pesel_' . $pesel;
+	}
+
+	private function getPeselResponse( $pesel ) {
 		try {
 			$this->login();
 			$response = $this->client->checkPesel( $pesel );
 			$this->logout();
 		} catch ( BaseException $e ) {
-			throw new ResponseException( $e->getMessage() );
+			$response = html_entity_decode( $e->getMessage() );
 		}
 
-		return new PESEL( $response );
-	}
-
-	private function getCacheKey( $pesel ) {
-		return 'Dartui\Ewus\pesel_' . $pesel;
+		return new PeselResponse( $response );
 	}
 
 	private function login() {
