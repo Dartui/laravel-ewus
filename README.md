@@ -4,21 +4,21 @@ eWUŚ integration for Laravel
 ## Usage
 
 ```php
-use Dartui\Ewus\Exceptions\ResponseException;
 use Dartui\Ewus\Facade as Ewus;
 
 class Foo {
 	public function pesel() {
-		try {
-			$pesel = Ewus::checkPesel( '00000000000' );
-			
-			if ( $pesel->hasInsurance() ) {
-				$first_name   = $pesel->getFirstName();
-				$last_name    = $pesel->getLastName();
-				$operation_id = $pesel->getOperationID();
-			}
-		} catch ( ResponseException $e ) {
-			// you can use $e->getMessage() here
+		// 1st param (int)      patient PESEL
+		// 2nd param (int|bool) cache duration (in hours)
+		// 3rd param (bool)     force request to eWUŚ (even if 2nd param is set to non-false value)
+		$pesel = Ewus::pesel( '00000000000', 6 );
+		
+		if ( $pesel->hasError() ) {
+			// do something with $pesel->getError()
+		} elseif ( $pesel->hasInsurance() ) {
+			$first_name   = $pesel->getFirstName();
+			$last_name    = $pesel->getLastName();
+			$operation_id = $pesel->getOperationID();
 		}
 	}
 
@@ -26,7 +26,7 @@ class Foo {
 	public function password() {
 		$new_password = 'secret';
 
-		if ( Ewus::changePassword( $new_password ) ) {
+		if ( Ewus::password( $new_password ) ) {
 			echo 'Success!';
 		} else {
 			echo 'Error';
@@ -34,6 +34,19 @@ class Foo {
 	}
 }
 ```
+
+## PeselResponse methods
+
+- getResponse()
+- getError()
+- getStatus()
+- getFirstName()
+- getLastName()
+- getOperationID()
+- getDomain()
+- hasError()
+- hasResponse()
+- hasInsurance()
 
 ## Instalation
 
