@@ -35,12 +35,12 @@ class Command extends BaseCommand {
 	 * @return mixed
 	 */
 	public function handle() {
-		$password = $this->argument('password') ?: str_random( 16 );
-		
-		if (Ewus::changePassword( $password )) {
-			$this->info('Pomyślnie zmieniono hasło do systemu eWUŚ.');
+		$password = $this->argument( 'password' ) ?: str_random( 16 );
+
+		if ( Ewus::password( $password ) ) {
+			$this->info( 'Pomyślnie zmieniono hasło do systemu eWUŚ.' );
 		} else {
-			$this->error('Błąd podczas zmiany hasła do systemu eWUŚ.');
+			$this->error( 'Błąd podczas zmiany hasła do systemu eWUŚ.' );
 		}
 	}
 }
