@@ -46,7 +46,7 @@ class PeselResponse {
 	}
 
 	public function hasError() {
-		return $this->getError() !== false;
+		return $this->getError() !== null;
 	}
 
 	public function hasInsurance() {
