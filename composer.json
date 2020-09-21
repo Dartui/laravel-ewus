@@ -1,4 +1,5 @@
 {
+    "abandoned": "etermed/ewus",
     "name": "dartui/ewus",
     "description": "eWUŚ integration for Laravel",
     "keywords": ["laravel", "ewus", "nfz", "pesel"],
