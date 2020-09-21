@@ -1,3 +1,9 @@
+# AS OF 2020-09-21 THIS PACKAGE IS UNMAINTAINED
+
+Please switch to https://github.com/etermed/ewus-php or other implementation.
+
+---
+
 # Laravel eWUŚ
 eWUŚ integration for Laravel
 
